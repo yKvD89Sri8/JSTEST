@@ -1,20 +1,19 @@
+# JavaScript Unit Testing and Code Coverage Tutorial
 
-# JavaScript 单元测试与代码覆盖率教程
-
-本指南介绍如何使用 Jest 对 JavaScript 中的函数进行单元测试，并提供覆盖率报告。
+This guide walks you through how to write unit tests for JavaScript functions using **Jest**, and how to generate code coverage reports.
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 安装 Jest
+### 1. Install Jest
 
 ```bash
 npm init -y
 npm install --save-dev jest
 ```
 
-修改 `package.json` 文件，添加测试脚本：
+Update your `package.json` file to include test scripts:
 
 ```json
 "scripts": {
@@ -23,9 +22,9 @@ npm install --save-dev jest
 }
 ```
 
-### 2. 修改待测函数 (`Main.js`)
+### 2. Modify the Target Function (`Main.js`)
 
-为便于测试，需要将待测函数导出，示例如下：
+To make your function testable, export it as shown below:
 
 ```js
 function Main(input) {
@@ -43,13 +42,13 @@ function descendingOrder(val1, val2) {
     return val2 - val1;
 }
 
-// 导出函数以供单元测试
+// Export the function for unit testing
 module.exports = { Main };
 ```
 
 ---
 
-## 🧪 编写测试用例 (`Main.test.js`)
+## 🧪 Writing Test Cases (`Main.test.js`)
 
 ```js
 const { Main } = require('./Main');
@@ -58,7 +57,7 @@ describe('Main function - Top 3 Hills', () => {
     let consoleOutput = [];
     const originalLog = console.log;
 
-    // 每个测试前，重置 console.log，以便捕获输出
+    // Mock console.log before each test
     beforeEach(() => {
         consoleOutput = [];
         console.log = (...args) => {
@@ -66,126 +65,49 @@ describe('Main function - Top 3 Hills', () => {
         };
     });
 
-    // 每个测试后，恢复原 console.log
+    // Restore console.log after each test
     afterEach(() => {
         console.log = originalLog;
     });
 
-    // 测试用例1：Sample Input 1 (官方提供示例)
-    test('Sample Input 1 (provided example)', () => {
-        const input = `
-1819
-2003
-876
-2840
-1723
-1673
-3776
-2848
-1592
-922`;
+    test('Provided example (Sample Input 1)', () => {
+        const input = "1819\n2003\n876\n2840\n1723\n1673\n3776\n2848\n1592\n922";
         Main(input);
         expect(consoleOutput).toEqual([3776, 2848, 2840]);
     });
 
-    // 测试用例2：Sample Input 2 (有重复值)
-    test('Sample Input 2 (provided example with duplicates)', () => {
-        const input = `
-100
-200
-300
-400
-500
-600
-700
-800
-900
-900`;
+    test('Provided example with duplicates (Sample Input 2)', () => {
+        const input = "100\n200\n300\n400\n500\n600\n700\n800\n900\n900";
         Main(input);
         expect(consoleOutput).toEqual([900, 900, 800]);
     });
 
-    // 测试用例3：所有山的高度相等
     test('All mountains equal height', () => {
-        const input = `
-1000
-1000
-1000
-1000
-1000
-1000
-1000
-1000
-1000
-1000`;
+        const input = "1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000";
         Main(input);
         expect(consoleOutput).toEqual([1000, 1000, 1000]);
     });
 
-    // 测试用例4：输入为升序排列的数字
     test('Ascending order input', () => {
-        const input = `
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10`;
+        const input = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
         Main(input);
         expect(consoleOutput).toEqual([10, 9, 8]);
     });
 
-    // 测试用例5：输入为降序排列的数字
     test('Descending order input', () => {
-        const input = `
-10
-9
-8
-7
-6
-5
-4
-3
-2
-1`;
+        const input = "10\n9\n8\n7\n6\n5\n4\n3\n2\n1";
         Main(input);
         expect(consoleOutput).toEqual([10, 9, 8]);
     });
 
-    // 测试用例6：最小约束条件（高度为 0）
-    test('Minimum constraint edge case (all zeros)', () => {
-        const input = `
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0`;
+    test('Edge case: minimum heights (all zeros)', () => {
+        const input = "0\n0\n0\n0\n0\n0\n0\n0\n0\n0";
         Main(input);
         expect(consoleOutput).toEqual([0, 0, 0]);
     });
 
-    // 测试用例7：最大约束条件（最大值 10,000）
-    test('Maximum constraint edge case (maximum value 10,000)', () => {
-        const input = `
-10000
-9999
-8888
-7777
-6666
-5555
-4444
-3333
-2222
-1111`;
+    test('Edge case: maximum height values', () => {
+        const input = "10000\n9999\n8888\n7777\n6666\n5555\n4444\n3333\n2222\n1111";
         Main(input);
         expect(consoleOutput).toEqual([10000, 9999, 8888]);
     });
@@ -194,15 +116,15 @@ describe('Main function - Top 3 Hills', () => {
 
 ---
 
-## 📊 运行测试与生成覆盖率报告
+## 📊 Run Tests and Generate Coverage Report
 
-执行以下命令进行测试：
+Run the following command to execute tests and generate a coverage report:
 
 ```bash
 npm run coverage
 ```
 
-完成后，你会看到类似以下的终端输出：
+After the tests run, you will see output similar to this in your terminal:
 
 ```
  PASS  ./Main.test.js
@@ -214,26 +136,27 @@ Main.js       |     100 |      100 |     100 |     100 |
 --------------|---------|----------|---------|---------|
 ```
 
-覆盖率报告（HTML）位于：
+The HTML version of the coverage report is located at:
+
 ```
 ./coverage/lcov-report/index.html
 ```
 
-你可以用浏览器打开，查看详细的覆盖率。
+Open it in your browser for a detailed view of test coverage.
 
 ---
 
-## 🎯 覆盖率指标说明
+## 🎯 Coverage Metrics Explained
 
-| 指标           | 含义                                |
-| -------------- | ----------------------------------- |
-| **% Stmts**    | 代码语句覆盖率（执行过的语句占比）  |
-| **% Branch**   | 分支覆盖率（条件分支覆盖占比）      |
-| **% Funcs**    | 函数调用覆盖率（被调用函数占比）    |
-| **% Lines**    | 行覆盖率（执行到的代码行占比）      |
+| Metric         | Description                                      |
+| -------------- | ------------------------------------------------ |
+| **% Stmts**    | Percentage of statements executed                |
+| **% Branch**   | Percentage of conditionals/branches covered      |
+| **% Funcs**    | Percentage of functions invoked during tests     |
+| **% Lines**    | Percentage of code lines executed                |
 
-一般情况下，覆盖率越高意味着代码的测试越完善。
+In general, the higher the coverage, the more thoroughly your code has been tested.
 
 ---
 
-🎉 至此，你已经成功完成 JavaScript 函数的单元测试与覆盖率报告生成！
+🎉 Congratulations! You’ve successfully set up unit testing and coverage reporting for your JavaScript functions!

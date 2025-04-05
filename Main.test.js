@@ -4,7 +4,7 @@ describe('Main function - Top 3 Hills', () => {
     let consoleOutput = [];
     const originalLog = console.log;
 
-    // 每个测试前，重置 console.log，以便捕获输出
+    // Mock console.log before each test
     beforeEach(() => {
         consoleOutput = [];
         console.log = (...args) => {
@@ -12,126 +12,49 @@ describe('Main function - Top 3 Hills', () => {
         };
     });
 
-    // 每个测试后，恢复原 console.log
+    // Restore console.log after each test
     afterEach(() => {
         console.log = originalLog;
     });
 
-    // 测试用例1：Sample Input 1 (官方提供示例)
-    test('Sample Input 1 (provided example)', () => {
-        const input = `
-1819
-2003
-876
-2840
-1723
-1673
-3776
-2848
-1592
-922`;
+    test('Provided example (Sample Input 1)', () => {
+        const input = "1819\n2003\n876\n2840\n1723\n1673\n3776\n2848\n1592\n922";
         Main(input);
         expect(consoleOutput).toEqual([3776, 2848, 2840]);
     });
 
-    // 测试用例2：Sample Input 2 (有重复值)
-    test('Sample Input 2 (provided example with duplicates)', () => {
-        const input = `
-100
-200
-300
-400
-500
-600
-700
-800
-900
-900`;
+    test('Provided example with duplicates (Sample Input 2)', () => {
+        const input = "100\n200\n300\n400\n500\n600\n700\n800\n900\n900";
         Main(input);
         expect(consoleOutput).toEqual([900, 900, 800]);
     });
 
-    // 测试用例3：所有山的高度相等
     test('All mountains equal height', () => {
-        const input = `
-1000
-1000
-1000
-1000
-1000
-1000
-1000
-1000
-1000
-1000`;
+        const input = "1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000\n1000";
         Main(input);
         expect(consoleOutput).toEqual([1000, 1000, 1000]);
     });
 
-    // 测试用例4：输入为升序排列的数字
     test('Ascending order input', () => {
-        const input = `
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10`;
+        const input = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
         Main(input);
         expect(consoleOutput).toEqual([10, 9, 8]);
     });
 
-    // 测试用例5：输入为降序排列的数字
     test('Descending order input', () => {
-        const input = `
-10
-9
-8
-7
-6
-5
-4
-3
-2
-1`;
+        const input = "10\n9\n8\n7\n6\n5\n4\n3\n2\n1";
         Main(input);
         expect(consoleOutput).toEqual([10, 9, 8]);
     });
 
-    // 测试用例6：最小约束条件（高度为 0）
-    test('Minimum constraint edge case (all zeros)', () => {
-        const input = `
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0`;
+    test('Edge case: minimum heights (all zeros)', () => {
+        const input = "0\n0\n0\n0\n0\n0\n0\n0\n0\n0";
         Main(input);
         expect(consoleOutput).toEqual([0, 0, 0]);
     });
 
-    // 测试用例7：最大约束条件（最大值 10,000）
-    test('Maximum constraint edge case (maximum value 10,000)', () => {
-        const input = `
-10000
-9999
-8888
-7777
-6666
-5555
-4444
-3333
-2222
-1111`;
+    test('Edge case: maximum height values', () => {
+        const input = "10000\n9999\n8888\n7777\n6666\n5555\n4444\n3333\n2222\n1111";
         Main(input);
         expect(consoleOutput).toEqual([10000, 9999, 8888]);
     });
